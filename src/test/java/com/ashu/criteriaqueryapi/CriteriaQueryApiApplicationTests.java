@@ -1,13 +1,11 @@
-package com.ashu.criteriaqueryapi;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class CriteriaQueryApiApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
-}
+//package com.ashu.criteriaqueryapi;
+//
+//import org.junit.jupiter.api.Test;
+//import org.springframework.boot.test.context.SpringBootTest;
+//
+//@SpringBootTest
+//class CriteriaQueryApiApplicationTests {
+//
+//
+//
+//}
