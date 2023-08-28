@@ -72,10 +72,11 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
         //
         Root<Employee> root = criteriaQuery.from(Employee.class);
 
-        Path<Object> pathFName = root.get("fName");
+        Path<Object> pathFname = root.get("fName");
         Path<Object> pathCity = root.get("city");
 
-        CriteriaQuery<Object[]> select = criteriaQuery.select(criteriaBuilder.array(pathFName, pathCity));
+        //CriteriaQuery<Object[]> select = criteriaQuery.select(criteriaBuilder.array(pathFName, pathCity));
+        criteriaQuery.multiselect(pathFname, pathCity);
 
         if(!ObjectUtils.isEmpty(fname)){
             CriteriaQuery<Object[]> fName = criteriaQuery.where(criteriaBuilder.like(root.get("fName"), '%' + fname + '%'));
