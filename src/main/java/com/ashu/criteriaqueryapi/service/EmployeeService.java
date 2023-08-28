@@ -1,5 +1,6 @@
 package com.ashu.criteriaqueryapi.service;
 
+import com.ashu.criteriaqueryapi.dto.EmployeeNameAndCityDTO;
 import com.ashu.criteriaqueryapi.model.Employee;
 
 import com.ashu.criteriaqueryapi.repo.EmployeeCustomRepoImpl;
@@ -26,5 +27,9 @@ public class EmployeeService {
 
     public List<String> searchReturnOnlyNames(String fname) {
         return employeeRepo.searchReturnOnlyNames(fname);
+    }
+
+    public List<EmployeeNameAndCityDTO> searchReturnNameAndCity(String fname) {
+        return employeeRepo.searchReturnNameAndCity(fname);
     }
 }

@@ -1,5 +1,6 @@
 package com.ashu.criteriaqueryapi.controller;
 
+import com.ashu.criteriaqueryapi.dto.EmployeeNameAndCityDTO;
 import com.ashu.criteriaqueryapi.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -42,9 +43,17 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees-name-search")
-    public ResponseEntity<List<String>> searchEmployeesNames(@RequestParam(required = false) String fname){
+    public ResponseEntity<List<String>> searchEmployeesReturnOnlyNames(@RequestParam(required = false) String fname){
 
         List<String> employeeList = employeeService.searchReturnOnlyNames(fname);
+        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/employees-name-city-search")
+    public ResponseEntity<List<EmployeeNameAndCityDTO>> searchEmployeesReturnNameAndCity(@RequestParam(required = false) String fname){
+
+        List<EmployeeNameAndCityDTO> employeeList = employeeService.searchReturnNameAndCity(fname);
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
 
     }
