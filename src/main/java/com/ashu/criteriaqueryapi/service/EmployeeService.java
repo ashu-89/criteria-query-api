@@ -2,7 +2,7 @@ package com.ashu.criteriaqueryapi.service;
 
 import com.ashu.criteriaqueryapi.model.Employee;
 
-import com.ashu.criteriaqueryapi.repo.EmployeeCustomRepo;
+import com.ashu.criteriaqueryapi.repo.EmployeeCustomRepoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ashu.criteriaqueryapi.repo.EmployeeRepo;
@@ -15,8 +15,8 @@ public class EmployeeService {
     @Autowired
     EmployeeRepo employeeRepo;
 
-    @Autowired
-    EmployeeCustomRepo employeeCustomRepo;
+//    @Autowired
+//    EmployeeCustomRepoImpl employeeCustomRepoImpl;
 
 
     public List<Employee> findAll() {
@@ -26,6 +26,6 @@ public class EmployeeService {
 
     public List<Employee> search(String fname) {
 
-        return employeeCustomRepo.search(fname);
+        return employeeRepo.search(fname);
     }
 }
