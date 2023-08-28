@@ -5,6 +5,18 @@ public class EmployeeNameAndCityDTO {
     private String fName;
     private String city;
 
+    //Default constructor
+
+
+    public EmployeeNameAndCityDTO() {
+    }
+
+    //All args constructor
+    public EmployeeNameAndCityDTO(String fName, String city) {
+        this.fName = fName;
+        this.city = city;
+    }
+
     //getters and setters
     public String getfName() {
         return fName;

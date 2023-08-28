@@ -67,7 +67,7 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
     @Override
     public List<EmployeeNameAndCityDTO> searchReturnNameAndCity(String fname) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
+        CriteriaQuery<EmployeeNameAndCityDTO> criteriaQuery = criteriaBuilder.createQuery(EmployeeNameAndCityDTO.class);
         
         //
         Root<Employee> root = criteriaQuery.from(Employee.class);
@@ -76,27 +76,16 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
         Path<Object> pathCity = root.get("city");
 
         //CriteriaQuery<Object[]> select = criteriaQuery.select(criteriaBuilder.array(pathFName, pathCity));
-        criteriaQuery.multiselect(pathFname, pathCity);
+        //criteriaQuery.multiselect(pathFname, pathCity);
+        criteriaQuery.select(criteriaBuilder.construct(EmployeeNameAndCityDTO.class, pathFname, pathCity));
 
         if(!ObjectUtils.isEmpty(fname)){
-            CriteriaQuery<Object[]> fName = criteriaQuery.where(criteriaBuilder.like(root.get("fName"), '%' + fname + '%'));
+            CriteriaQuery<EmployeeNameAndCityDTO> fName = criteriaQuery.where(criteriaBuilder.like(root.get("fName"), '%' + fname + '%'));
         }
 
-        TypedQuery<Object[]> query = entityManager.createQuery(criteriaQuery);
-        List<Object[]> resultList = query.getResultList();
+        TypedQuery<EmployeeNameAndCityDTO> query = entityManager.createQuery(criteriaQuery);
+        List<EmployeeNameAndCityDTO> resultList = query.getResultList();
 
-        List<EmployeeNameAndCityDTO> namesAndCities = new ArrayList<>();
-
-        resultList.forEach(x -> {
-            EmployeeNameAndCityDTO dto = new EmployeeNameAndCityDTO();
-
-            dto.setfName(x[0].toString());
-            dto.setCity(x[1].toString());
-
-            namesAndCities.add(dto);
-
-        });
-
-        return namesAndCities;
+        return resultList;
     }
 }
