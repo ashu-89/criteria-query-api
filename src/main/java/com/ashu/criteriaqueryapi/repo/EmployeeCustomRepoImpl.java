@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
@@ -39,5 +40,28 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
         return query.getResultList();
 
 
+    }
+
+    @Override
+    public List<String> searchReturnOnlyNames(String fname) {
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<String> criteriaQuery = criteriaBuilder.createQuery(String.class);
+
+        //
+        Root<Employee> root = criteriaQuery.from(Employee.class);
+        criteriaQuery.select(root.get("fName"));
+
+        if(!Objects.isNull(fname)){
+
+            Predicate fnamePredicate = criteriaBuilder.like(root.get("fName"), '%' + fname + '%');
+            criteriaQuery.where(fnamePredicate);
+        }
+
+        TypedQuery<String> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<String> resultList = typedQuery.getResultList();
+
+        return resultList;
     }
 }

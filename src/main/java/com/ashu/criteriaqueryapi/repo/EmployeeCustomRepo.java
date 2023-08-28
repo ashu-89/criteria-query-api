@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface EmployeeCustomRepo {
     public List<Employee> search(String fName);
+
+    List<String> searchReturnOnlyNames(String fname);
 }

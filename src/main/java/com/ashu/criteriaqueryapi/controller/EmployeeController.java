@@ -40,4 +40,12 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
 
     }
+
+    @GetMapping("/employees-name-search")
+    public ResponseEntity<List<String>> searchEmployeesNames(@RequestParam(required = false) String fname){
+
+        List<String> employeeList = employeeService.searchReturnOnlyNames(fname);
+        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+
+    }
 }

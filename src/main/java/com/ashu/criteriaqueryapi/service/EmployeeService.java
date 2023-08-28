@@ -15,17 +15,16 @@ public class EmployeeService {
     @Autowired
     EmployeeRepo employeeRepo;
 
-//    @Autowired
-//    EmployeeCustomRepoImpl employeeCustomRepoImpl;
-
-
     public List<Employee> findAll() {
 
         return employeeRepo.findAll();
     }
 
     public List<Employee> search(String fname) {
-
         return employeeRepo.search(fname);
+    }
+
+    public List<String> searchReturnOnlyNames(String fname) {
+        return employeeRepo.searchReturnOnlyNames(fname);
     }
 }
