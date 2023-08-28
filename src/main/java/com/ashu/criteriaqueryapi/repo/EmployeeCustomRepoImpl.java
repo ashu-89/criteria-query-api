@@ -3,6 +3,7 @@ package com.ashu.criteriaqueryapi.repo;
 import com.ashu.criteriaqueryapi.dto.EmployeeNameAndCityDTO;
 import com.ashu.criteriaqueryapi.model.Employee;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
     @Override
     public List<EmployeeNameAndCityDTO> searchReturnNameAndCity(String fname) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<EmployeeNameAndCityDTO> criteriaQuery = criteriaBuilder.createQuery(EmployeeNameAndCityDTO.class);
+        CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createQuery(Tuple.class);
         
         //
         Root<Employee> root = criteriaQuery.from(Employee.class);
@@ -76,16 +77,25 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
         Path<Object> pathCity = root.get("city");
 
         //CriteriaQuery<Object[]> select = criteriaQuery.select(criteriaBuilder.array(pathFName, pathCity));
-        //criteriaQuery.multiselect(pathFname, pathCity);
-        criteriaQuery.select(criteriaBuilder.construct(EmployeeNameAndCityDTO.class, pathFname, pathCity));
+        criteriaQuery.multiselect(pathFname, pathCity);
+        //criteriaQuery.select(criteriaBuilder.construct(EmployeeNameAndCityDTO.class, pathFname, pathCity));
 
         if(!ObjectUtils.isEmpty(fname)){
-            CriteriaQuery<EmployeeNameAndCityDTO> fName = criteriaQuery.where(criteriaBuilder.like(root.get("fName"), '%' + fname + '%'));
+            CriteriaQuery<Tuple> fName = criteriaQuery.where(criteriaBuilder.like(root.get("fName"), '%' + fname + '%'));
         }
 
-        TypedQuery<EmployeeNameAndCityDTO> query = entityManager.createQuery(criteriaQuery);
-        List<EmployeeNameAndCityDTO> resultList = query.getResultList();
+        TypedQuery<Tuple> query = entityManager.createQuery(criteriaQuery);
+        List<Tuple> resultList = query.getResultList();
 
-        return resultList;
+        List<EmployeeNameAndCityDTO> dtoList = new ArrayList<>();
+
+        resultList.forEach(x -> {
+            EmployeeNameAndCityDTO dto = new EmployeeNameAndCityDTO();
+            dto.setfName(x.get(pathFname).toString());
+            dto.setCity(x.get(pathCity).toString());
+            dtoList.add(dto);
+        });
+
+        return dtoList;
     }
 }
