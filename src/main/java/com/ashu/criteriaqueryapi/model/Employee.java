@@ -1,9 +1,11 @@
 package com.ashu.criteriaqueryapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import org.hibernate.Hibernate;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -18,6 +20,9 @@ public class Employee {
     private String fName;
     private String lName;
     private String city;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Address> addresses;
 
     //Getters and setters
 
@@ -51,5 +56,13 @@ public class Employee {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 }
