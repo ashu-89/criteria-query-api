@@ -2,6 +2,7 @@ package com.ashu.criteriaqueryapi.repo;
 
 import com.ashu.criteriaqueryapi.dto.EmployeeNameAndCityDTO;
 import com.ashu.criteriaqueryapi.dto.EmployeeNamesPincodeDTO;
+import com.ashu.criteriaqueryapi.model.Address;
 import com.ashu.criteriaqueryapi.model.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -102,6 +103,43 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
 
     @Override
     public List<EmployeeNamesPincodeDTO> searchTwoRoots(String fname) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createQuery(Tuple.class);
+
+        // This is invalid, lol. criteriaQuery.from(Employee.class, Address.class);
+        Root<Employee> employeeRoot = criteriaQuery.from(Employee.class);
+        Root<Address> addressRoot = criteriaQuery.from(Address.class);
+
+        criteriaQuery.multiselect(employeeRoot,addressRoot);
+        //Acting as outer join
+
+        if(!ObjectUtils.isEmpty(fname)){
+            Predicate fNamePredicate = criteriaBuilder.like(employeeRoot.get("fName"), '%' + fname + '%');
+            criteriaQuery.where(fNamePredicate);
+        }
+
+        TypedQuery<Tuple> query = entityManager.createQuery(criteriaQuery);
+        List<Tuple> resultList = query.getResultList();
+
+        List<EmployeeNamesPincodeDTO> dtoList = new ArrayList<>();
+
+        resultList.forEach(x -> {
+            Employee e = (Employee) x.get(0);
+            Address a = (Address) x.get(1);
+
+            EmployeeNamesPincodeDTO dto = new EmployeeNamesPincodeDTO();
+
+            dto.setfName(e.getfName());
+            dto.setlName(e.getlName());
+            dto.setPinCode(a.getPincode());
+
+            dtoList.add(dto);
+
+        });
+
+        return dtoList;
+
+
     }
 }
