@@ -1,6 +1,7 @@
 package com.ashu.criteriaqueryapi.controller;
 
 import com.ashu.criteriaqueryapi.dto.EmployeeNameAndCityDTO;
+import com.ashu.criteriaqueryapi.dto.EmployeeNamesPincodeDTO;
 import com.ashu.criteriaqueryapi.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -57,4 +58,25 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
 
     }
+
+    /*
+
+    Idea is to make a criteria query api to join from 2 roots.
+
+    The following native query should be executed using criteria query api.
+
+        select e.f_name, e.l_name, a.pincode
+        from employee e inner join Address a on e.id = a.employee_id
+        where e.f_name like '%a%';
+
+     */
+    @GetMapping("/employees-search-two-roots")
+    public ResponseEntity<List<EmployeeNamesPincodeDTO>> searchEmployeesTwoRoots(@RequestParam(required = false) String fname){
+
+        List<EmployeeNamesPincodeDTO> employeeList = employeeService.searchTwoRoots(fname);
+        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+
+    }
+
+
 }

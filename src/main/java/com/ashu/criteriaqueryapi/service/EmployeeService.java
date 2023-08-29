@@ -1,9 +1,9 @@
 package com.ashu.criteriaqueryapi.service;
 
 import com.ashu.criteriaqueryapi.dto.EmployeeNameAndCityDTO;
+import com.ashu.criteriaqueryapi.dto.EmployeeNamesPincodeDTO;
 import com.ashu.criteriaqueryapi.model.Employee;
 
-import com.ashu.criteriaqueryapi.repo.EmployeeCustomRepoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ashu.criteriaqueryapi.repo.EmployeeRepo;
@@ -31,5 +31,9 @@ public class EmployeeService {
 
     public List<EmployeeNameAndCityDTO> searchReturnNameAndCity(String fname) {
         return employeeRepo.searchReturnNameAndCity(fname);
+    }
+
+    public List<EmployeeNamesPincodeDTO> searchTwoRoots(String fname) {
+        return employeeRepo.searchTwoRoots(fname);
     }
 }

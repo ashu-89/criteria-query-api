@@ -1,6 +1,7 @@
 package com.ashu.criteriaqueryapi.repo;
 
 import com.ashu.criteriaqueryapi.dto.EmployeeNameAndCityDTO;
+import com.ashu.criteriaqueryapi.dto.EmployeeNamesPincodeDTO;
 import com.ashu.criteriaqueryapi.model.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -97,5 +98,10 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
         });
 
         return dtoList;
+    }
+
+    @Override
+    public List<EmployeeNamesPincodeDTO> searchTwoRoots(String fname) {
+        return null;
     }
 }
