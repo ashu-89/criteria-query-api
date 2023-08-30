@@ -105,13 +105,17 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
     public List<EmployeeNamesPincodeDTO> searchTwoRoots(String fname) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createQuery(Tuple.class);
+        CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
 
         // This is invalid, lol. criteriaQuery.from(Employee.class, Address.class);
         Root<Employee> employeeRoot = criteriaQuery.from(Employee.class);
-        Root<Address> addressRoot = criteriaQuery.from(Address.class);
+        employeeRoot.join("addresses");
 
-        criteriaQuery.multiselect(employeeRoot,addressRoot);
+//        Path<Object> fNamePath = employeeRoot.get("fName");
+//        Path<Object> lNamePath = employeeRoot.get("lName");
+//        Path<Object> addressesPath = employeeRoot.get("addresses");
+
+        //criteriaQuery.multiselect(employeeRoot,addressRoot);
         //Acting as outer join
 
         if(!ObjectUtils.isEmpty(fname)){
@@ -119,20 +123,22 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
             criteriaQuery.where(fNamePredicate);
         }
 
-        TypedQuery<Tuple> query = entityManager.createQuery(criteriaQuery);
-        List<Tuple> resultList = query.getResultList();
+        TypedQuery<Employee> query = entityManager.createQuery(criteriaQuery);
+        List<Employee> resultList = query.getResultList();
 
         List<EmployeeNamesPincodeDTO> dtoList = new ArrayList<>();
 
         resultList.forEach(x -> {
-            Employee e = (Employee) x.get(0);
-            Address a = (Address) x.get(1);
+
 
             EmployeeNamesPincodeDTO dto = new EmployeeNamesPincodeDTO();
 
-            dto.setfName(e.getfName());
-            dto.setlName(e.getlName());
-            dto.setPinCode(a.getPincode());
+            dto.setfName(x.getfName());
+            dto.setlName(x.getlName());
+
+            List<Address> addresses = (List<Address>) x.getAddresses();
+
+            dto.setPinCode(addresses.get(0).getPincode());
 
             dtoList.add(dto);
 
