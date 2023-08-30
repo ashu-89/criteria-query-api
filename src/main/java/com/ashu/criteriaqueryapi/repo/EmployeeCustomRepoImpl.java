@@ -109,7 +109,20 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
 
         // This is invalid, lol. criteriaQuery.from(Employee.class, Address.class);
         Root<Employee> employeeRoot = criteriaQuery.from(Employee.class);
-        employeeRoot.join("addresses");
+        //employeeRoot.join("addresses");
+
+        //with employeeRoot.join, hibernate generates following queries - note JOIN
+//        Hibernate: select e1_0.id,e1_0.city,e1_0.f_name,e1_0.l_name from employee e1_0 join address a1_0 on e1_0.id=a1_0.employee_id where e1_0.f_name like ? escape ''
+//        Hibernate: select a1_0.employee_id,a1_0.id,a1_0.apartment_name,a1_0.city,a1_0.flat_number,a1_0.pincode from address a1_0 where a1_0.employee_id=?
+
+        //Without employeeRoot.join also, we get right response in API.
+        //But hibernate generates queries w/o join
+//        Hibernate: select e1_0.id,e1_0.city,e1_0.f_name,e1_0.l_name from employee e1_0 where e1_0.f_name like ? escape ''
+//        Hibernate: select a1_0.employee_id,a1_0.id,a1_0.apartment_name,a1_0.city,a1_0.flat_number,a1_0.pincode from address a1_0 where a1_0.employee_id=?
+
+
+
+
 
 //        Path<Object> fNamePath = employeeRoot.get("fName");
 //        Path<Object> lNamePath = employeeRoot.get("lName");
@@ -136,7 +149,7 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
             dto.setfName(x.getfName());
             dto.setlName(x.getlName());
 
-            List<Address> addresses = (List<Address>) x.getAddresses();
+            List<Address> addresses = x.getAddresses();
 
             dto.setPinCode(addresses.get(0).getPincode());
 
