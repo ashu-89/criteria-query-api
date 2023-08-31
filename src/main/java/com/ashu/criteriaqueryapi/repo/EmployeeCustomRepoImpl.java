@@ -109,7 +109,7 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
 
         // This is invalid, lol. criteriaQuery.from(Employee.class, Address.class);
         Root<Employee> employeeRoot = criteriaQuery.from(Employee.class);
-        //employeeRoot.join("addresses");
+        employeeRoot.fetch("addresses");
 
         //with employeeRoot.join, hibernate generates following queries - note JOIN
 //        Hibernate: select e1_0.id,e1_0.city,e1_0.f_name,e1_0.l_name from employee e1_0 join address a1_0 on e1_0.id=a1_0.employee_id where e1_0.f_name like ? escape ''
