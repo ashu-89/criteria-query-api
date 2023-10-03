@@ -14,4 +14,6 @@ public interface EmployeeCustomRepo {
     List<EmployeeNameAndCityDTO> searchReturnNameAndCity(String fname);
 
     List<EmployeeNamesPincodeDTO> searchTwoRoots(String fname);
+
+    List<EmployeeNamesPincodeDTO> fetchEmployeesByPinCode(String pinCode);
 }

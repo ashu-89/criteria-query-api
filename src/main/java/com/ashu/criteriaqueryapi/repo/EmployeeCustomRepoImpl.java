@@ -5,6 +5,7 @@ import com.ashu.criteriaqueryapi.dto.EmployeeNamesPincodeDTO;
 import com.ashu.criteriaqueryapi.model.Address;
 import com.ashu.criteriaqueryapi.model.Employee;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
@@ -159,6 +160,46 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
 
         return dtoList;
 
+
+    }
+
+    @Override
+    public List<EmployeeNamesPincodeDTO> fetchEmployeesByPinCode(String pinCode) {
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
+
+        Root<Employee> root = criteriaQuery.from(Employee.class);
+        root.join("addresses");
+
+        criteriaQuery.multiselect(root.get("fName"), root.get("lName"), root.get("addresses").get("pincode"));
+
+        Predicate equal = criteriaBuilder.equal(root.get("addresses").get("pincode"), pinCode);
+
+        criteriaQuery.where(equal);
+
+        TypedQuery<Employee> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        //typedQuery.setParameter(pinCode, pinCode);
+
+        List<Employee> resultList = typedQuery.getResultList();
+
+        List<EmployeeNamesPincodeDTO> dtoList = new ArrayList<>();
+
+        resultList.forEach(x -> {
+            EmployeeNamesPincodeDTO dto = new EmployeeNamesPincodeDTO();
+            dto.setfName(x.getfName());
+            dto.setlName(x.getlName());
+
+            List<Address> addresses = x.getAddresses();
+            Address address = addresses.get(0);
+
+            dto.setPinCode(address.getPincode());
+
+            dtoList.add(dto);
+        });
+
+        return dtoList;
 
     }
 }

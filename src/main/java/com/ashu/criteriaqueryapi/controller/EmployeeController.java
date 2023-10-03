@@ -78,5 +78,23 @@ public class EmployeeController {
 
     }
 
+    /*
+    The idea is to pass ID as pathvariable or query parameter and replace placeholder parameter in repo's query with
+    the id coming in dynamically at run time.
+
+    //Bind the parameters using criteria query api.
+
+    //We will fetch employee name from employee table where we pass pincode as query paramter and look for pincode in
+    address table.
+     */
+
+    @GetMapping("/employees-by-pin-code")
+    public ResponseEntity<List<EmployeeNamesPincodeDTO>> searchEmployeesById(@RequestParam(required = false) String pinCode){
+
+        List<EmployeeNamesPincodeDTO> employeeList = employeeService.fetchEmployeesByPinCode(pinCode);
+        return new ResponseEntity<>(employeeList, HttpStatus.OK);
+
+    }
+
 
 }

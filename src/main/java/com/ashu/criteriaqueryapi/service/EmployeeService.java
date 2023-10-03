@@ -36,4 +36,8 @@ public class EmployeeService {
     public List<EmployeeNamesPincodeDTO> searchTwoRoots(String fname) {
         return employeeRepo.searchTwoRoots(fname);
     }
+
+    public List<EmployeeNamesPincodeDTO> fetchEmployeesByPinCode(String pinCode) {
+        return employeeRepo.fetchEmployeesByPinCode(pinCode);
+    }
 }
