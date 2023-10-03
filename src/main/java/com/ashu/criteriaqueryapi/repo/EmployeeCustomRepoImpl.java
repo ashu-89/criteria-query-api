@@ -171,14 +171,20 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
 
         Root<Employee> root = criteriaQuery.from(Employee.class);
         root.join("addresses");
+//        root.fetch("addresses");
 
         criteriaQuery.multiselect(root.get("fName"), root.get("lName"), root.get("addresses").get("pincode"));
 
-        Predicate equal = criteriaBuilder.equal(root.get("addresses").get("pincode"), pinCode);
 
+
+        ParameterExpression<String> pinCodeParam = criteriaBuilder.parameter(String.class);
+
+        Predicate equal = criteriaBuilder.equal(root.get("addresses").get("pincode"), pinCodeParam);
         criteriaQuery.where(equal);
 
         TypedQuery<Employee> typedQuery = entityManager.createQuery(criteriaQuery);
+        typedQuery.setParameter(pinCodeParam, pinCode);
+
 
         //typedQuery.setParameter(pinCode, pinCode);
 
