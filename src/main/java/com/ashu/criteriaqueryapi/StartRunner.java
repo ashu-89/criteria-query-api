@@ -50,7 +50,7 @@ public class StartRunner implements ApplicationRunner {
         ashuzAddress.setEmployee(ashu);
         ashuzAddress.setApartmentName("Janadhaar subha");
         ashuzAddress.setFlatNumber("107");
-        ashuzAddress.setPincode("562107");
+        ashuzAddress.setPinCode("562107");
         ashuzAddress.setCity("Bangalore");
         addressRepo.save(ashuzAddress);
         List<Address> ashuzAddresses = new ArrayList<>();
@@ -62,7 +62,7 @@ public class StartRunner implements ApplicationRunner {
         abhizAddress.setEmployee(abhi);
         abhizAddress.setApartmentName("Abhiz apartment");
         abhizAddress.setFlatNumber("101");
-        abhizAddress.setPincode("560047");
+        abhizAddress.setPinCode("560047");
         abhizAddress.setCity("Bengaluru");
         addressRepo.save(abhizAddress);
 

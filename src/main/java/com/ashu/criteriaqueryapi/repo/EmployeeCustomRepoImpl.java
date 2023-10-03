@@ -152,7 +152,7 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
 
             List<Address> addresses = x.getAddresses();
 
-            dto.setPinCode(addresses.get(0).getPincode());
+            dto.setPinCode(addresses.get(0).getPinCode());
 
             dtoList.add(dto);
 
@@ -162,50 +162,91 @@ public class EmployeeCustomRepoImpl implements EmployeeCustomRepo {
 
 
     }
+
+//    @Override
+//    public List<EmployeeNamesPincodeDTO> fetchEmployeesByPinCode(String pinCode) {
+//
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
+//
+//        Root<Employee> root = criteriaQuery.from(Employee.class);
+//        root.join("addresses");
+////        root.fetch("addresses");
+//
+//        criteriaQuery.multiselect(root.get("fName"), root.get("lName"), root.get("addresses").get("pinCode"));
+//
+//
+//
+//        ParameterExpression<String> pinCodeParam = criteriaBuilder.parameter(String.class);
+//
+//        Predicate equal = criteriaBuilder.equal(root.get("addresses").get("pinCode"), pinCodeParam);
+//        criteriaQuery.where(equal);
+//
+//        TypedQuery<Employee> typedQuery = entityManager.createQuery(criteriaQuery);
+//        typedQuery.setParameter(pinCodeParam, pinCode);
+//
+//
+//        //typedQuery.setParameter(pinCode, pinCode);
+//
+//        List<Employee> resultList = typedQuery.getResultList();
+//
+//        List<EmployeeNamesPincodeDTO> dtoList = new ArrayList<>();
+//
+//        resultList.forEach(x -> {
+//            EmployeeNamesPincodeDTO dto = new EmployeeNamesPincodeDTO();
+//            dto.setfName(x.getfName());
+//            dto.setlName(x.getlName());
+//
+//            List<Address> addresses = x.getAddresses();
+//            Address address = addresses.get(0);
+//
+//            dto.setPinCode(address.getPinCode());
+//
+//            dtoList.add(dto);
+//        });
+//
+//        return dtoList;
+//
+//    }
+
+
 
     @Override
     public List<EmployeeNamesPincodeDTO> fetchEmployeesByPinCode(String pinCode) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
+        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
 
         Root<Employee> root = criteriaQuery.from(Employee.class);
-        root.join("addresses");
-//        root.fetch("addresses");
+        Join<Object, Object> addressJoin = root.join("addresses");
 
-        criteriaQuery.multiselect(root.get("fName"), root.get("lName"), root.get("addresses").get("pincode"));
-
-
+        criteriaQuery.multiselect(
+                root.get("fName"),
+                root.get("lName"),
+                addressJoin.get("pinCode")
+        );
 
         ParameterExpression<String> pinCodeParam = criteriaBuilder.parameter(String.class);
-
-        Predicate equal = criteriaBuilder.equal(root.get("addresses").get("pincode"), pinCodeParam);
+        Predicate equal = criteriaBuilder.equal(addressJoin.get("pinCode"), pinCodeParam);
         criteriaQuery.where(equal);
 
-        TypedQuery<Employee> typedQuery = entityManager.createQuery(criteriaQuery);
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(criteriaQuery);
         typedQuery.setParameter(pinCodeParam, pinCode);
 
-
-        //typedQuery.setParameter(pinCode, pinCode);
-
-        List<Employee> resultList = typedQuery.getResultList();
+        List<Object[]> resultList = typedQuery.getResultList();
 
         List<EmployeeNamesPincodeDTO> dtoList = new ArrayList<>();
 
         resultList.forEach(x -> {
             EmployeeNamesPincodeDTO dto = new EmployeeNamesPincodeDTO();
-            dto.setfName(x.getfName());
-            dto.setlName(x.getlName());
-
-            List<Address> addresses = x.getAddresses();
-            Address address = addresses.get(0);
-
-            dto.setPinCode(address.getPincode());
-
+            dto.setfName(x[0].toString());
+            dto.setlName(x[1].toString());
+            dto.setPinCode(x[2].toString());
             dtoList.add(dto);
         });
 
         return dtoList;
-
     }
+
+
 }

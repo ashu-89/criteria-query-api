@@ -12,7 +12,7 @@ public class Address {
     private String flatNumber;
     private String apartmentName;
     private String city;
-    private String pincode;
+    private String pinCode;
 
     @ManyToOne
     private Employee employee;
@@ -51,12 +51,12 @@ public class Address {
         this.city = city;
     }
 
-    public String getPincode() {
-        return pincode;
+    public String getPinCode() {
+        return pinCode;
     }
 
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
+    public void setPinCode(String pinCode) {
+        this.pinCode = pinCode;
     }
 
     public Employee getEmployee() {
